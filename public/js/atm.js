@@ -10,6 +10,8 @@ $(function(){
         $("#accountMenu").removeClass("none");
         accountOpening()
     });
+
+    $()
 });
 
 // メニューを選択した時の画面表示の切り替え
@@ -50,7 +52,24 @@ function balanceReference(){
         url: "bankTrading/" + $('meta[name="account-id"]').attr('content')
     })
     .done(function(responce){
-        $(".checkBalanceErea", "span").text(responce["deposit_balance"])
+        $("#checkBalanceErea span").text(responce["deposit_balance"])
+    })
+    .fail(function(){
+        console.log(responce)
+    });
+}
+
+function depositMoney(){
+    $.ajax({
+        type: "post",
+        url: "bankTrading/depositMoney/" + $('meta[name="account-id"]').attr('content'),
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        data:{
+            "amount": $('input[type="number"]')
+        }
+    })
+    .done(function(responce){
+        console.log("残高は" + responce["deposit_balance"] + "円です")
     })
     .fail(function(){
         console.log(responce)
