@@ -31,7 +31,7 @@ class AtmController extends Controller{
         $account = BankAccount::find($accountId);
         $deposit = $account->deposit_balance += $request->amount;
         $account->save();
-        return response()->json($request->amount);
+        return response()->json($deposit);
     }
 
     public function withdrawal(Request $request, $accountId){

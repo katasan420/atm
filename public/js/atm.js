@@ -12,8 +12,11 @@ $(function(){
     });
 
     $("#depositErea button").on("click", function(){
-        console.log("押した");
         depositMoney();
+    })
+
+    $("#withdrawalErea button").on("click", function(){
+        withdrawal();
     })
 });
 
@@ -71,12 +74,33 @@ function depositMoney(){
         url: "bankTrading/depositMoney/" + $('meta[name="account-id"]').attr('content'),
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            'Content': "application/json"
+            'Content-Type': "application/json"
         },
         data: JSON.stringify(requestDate)
     })
     .done(function(response){
+        console.log("残高は" + response + "円です")
+    })
+    .fail(function(response){
         console.log(response)
+    });
+}
+
+function withdrawal(){
+    let requestDate = {
+        "amount": parseInt($('#withdrawalErea input[type="number"]').val())
+    };
+    $.ajax({
+        type: "post",
+        url: "bankTrading/withdrawal/" + $('meta[name="account-id"]').attr('content'),
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': "application/json"
+        },
+        data: JSON.stringify(requestDate)
+    })
+    .done(function(response){
+        console.log("残高は" + response + "円です")
     })
     .fail(function(response){
         console.log(response)
