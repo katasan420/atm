@@ -13,3 +13,6 @@
 
 Route::get('createToken', 'AtmController@createToken');
 Route::post('bankTrading/accountOpening', 'AtmController@accountOpen');
+Route::get('bankTrading/{account_id}', 'AtmController@balanceReference');
+Route::post('bankTrading/depositMoney/{account_id}', 'AtmController@deposit');
+Route::post('bankTrading/withdrawal/{account_id}', 'AtmController@withdrawal');
