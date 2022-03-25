@@ -11,6 +11,7 @@
 |
 */
 
+Route::get("index", "AtmController@index");
 Route::get('createToken', 'AtmController@createToken');
 Route::post('bankTrading/accountOpening', 'AtmController@accountOpen');
 Route::get('bankTrading/{account_id}', 'AtmController@balanceReference');
