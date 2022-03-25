@@ -8,10 +8,13 @@ $(function(){
     $("#accountOpening").on("click", function(){
         $("#accountOpeningErea").addClass("none");
         $("#accountMenu").removeClass("none");
-        accountOpening()
+        accountOpening();
     });
 
-    $()
+    $("#depositErea button").on("click", function(){
+        console.log("押した");
+        depositMoney();
+    })
 });
 
 // メニューを選択した時の画面表示の切り替え
@@ -22,7 +25,7 @@ function switchingShowContent(targetElement){
     let idName = $(targetElement).attr("id");
     $("#" + idName + "Erea").removeClass("none");
     if(idName === "checkBalance"){
-        balanceReference()
+        balanceReference();
     }
 }
 
@@ -37,12 +40,12 @@ function accountOpening(){
         url: "bankTrading/accountOpening",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
     })
-    .done(function(responce){
-        $('meta[name="account-id"]').attr('content', responce["id"])
+    .done(function(response){
+        $('meta[name="account-id"]').attr('content', response["id"])
         balanceReference()
     })
-    .fail(function(){
-        console.log(responce)
+    .fail(function(response){
+        console.log(response)
     });
 }
 
@@ -51,27 +54,31 @@ function balanceReference(){
         type: "get",
         url: "bankTrading/" + $('meta[name="account-id"]').attr('content')
     })
-    .done(function(responce){
-        $("#checkBalanceErea span").text(responce["deposit_balance"])
+    .done(function(response){
+        $("#checkBalanceErea span").text(response)
     })
-    .fail(function(){
-        console.log(responce)
+    .fail(function(response){
+        console.log(response)
     });
 }
 
 function depositMoney(){
+    let requestDate = {
+        "amount": parseInt($('#depositErea input[type="number"]').val())
+    };
     $.ajax({
         type: "post",
         url: "bankTrading/depositMoney/" + $('meta[name="account-id"]').attr('content'),
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        data:{
-            "amount": $('input[type="number"]')
-        }
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content': "application/json"
+        },
+        data: JSON.stringify(requestDate)
     })
-    .done(function(responce){
-        console.log("残高は" + responce["deposit_balance"] + "円です")
+    .done(function(response){
+        console.log(response)
     })
-    .fail(function(){
-        console.log(responce)
+    .fail(function(response){
+        console.log(response)
     });
 }
